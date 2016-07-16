@@ -1,0 +1,171 @@
+﻿Transmission control character
+STX: 02h   ETX: 03h
+
+STX
+DATA LENGHT 3 BYTES ASCII
+SECUENCE 1 BYTE HEX
+COMMAND NUMBER ASCII 3 BYTES
+DATA ASCII UP TO 1000 BYTES
+ETX
+CRC HEX 4 BYTES
+
+GET DOOR STATUS
+02        STX
+000033    DATA LENGHT 3 BYTES ASCII
+CRC32 DATA -----------------------------
+01        SECUENCE 1 BYTE HEX
+313036    COMMAND NUMBER ASCII 3 BYTES
+00        DATA ASCII UP TO 1000 BYTES
+CRC32 DATA -----------------------------
+03        ETX
+CRC HEX 4 BYTES
+Data for CRC32: 0131303600
+CRC32 is: 865382d4
+Complete package: 020000330131303600865382d403
+Answer: 02 00 
+00 33 
+01 31 
+30 36 
+00 86 
+53 82 
+D4 03
+020000330131303600865382D403
+
+GET REQUEST POOLING
+02        STX
+000033    DATA LENGHT 3 BYTES ASCII
+CRC32 DATA -----------------------------
+01        SECUENCE 1 BYTE HEX
+313037    COMMAND NUMBER ASCII 3 BYTES
+00        DATA ASCII UP TO 1000 BYTES
+CRC32 DATA -----------------------------
+03        ETX
+CRC HEX 4 BYTES
+Data for CRC32: 
+CRC32 is: 3eefe5b1
+Complete package: 0200003301313037003eefe5b103
+Answer: 02 00 
+00 33 
+01 31 
+30 37 
+00 3E 
+EF E5 
+B1 03
+
+AFTER MAKE A PURCHASE
+02 30 
+30 35 
+
+20 35 
+31 30 
+31 
+
+2035313031 
+
+03 
+34 45 
+39 37 
+------------------------------
+02 
+
+30 - 0<- START CRC
+30 - 0 
+35 - 5
+
+20 - SPC
+
+35 - 5
+31 - 1
+30 - 0
+
+31 
+
+03 <- END CRC
+ 
+34 - 4 H
+45 - E H
+39 - 9 H
+37 - 7 H
+-------------------------------
+02 30 30 
+35 20 
+35 31 
+30 31 03 
+34 45 
+39 37 
+-------------------------------
+02 30 30 
+35 20 
+35 31 30 
+31 03 
+34 45 
+39 37 
+------------------------------
+02 30 30 
+35 20 
+35 31 
+30 31 
+03 34 45 
+39 37 
+02 30 30 
+35 20 35 
+31 30 
+31 03 
+34 45 
+39 37 
+
+02 30 30 
+35 20 
+35 31 
+30 31 
+03 34 45 
+39 37 
+
+02 30 30 
+35 20 
+35 31 
+30 30 
+03 34 
+45 39 
+36 
+
+02 30 30 
+35 20 35 
+31 30 
+30 03 
+34 45 
+39 36 
+
+02 30 30 
+35 20 
+35 31 30 
+30 03 34 
+45 39 
+36 
+
+02 30 30 
+35 20 35 
+31 30 
+30 03 34 
+45 39 
+36 
+
+02 30 30 
+35 20 35 
+31 30 
+30 03 34 
+45 39 
+36 
+
+02 30 30 
+35 20 
+35 31 30 
+30 03 34 
+45 39 36 
+
+02 30 30 
+35 20 35 
+31 30 
+30 03 34 
+45 39 
+36 
