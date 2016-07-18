@@ -488,6 +488,7 @@ namespace SerialPortTerminal
             this.txtData.Size = new System.Drawing.Size(61, 22);
             this.txtData.TabIndex = 19;
             this.txtData.Text = "1";
+            this.txtData.TextChanged += new System.EventHandler(this.txtData_TextChanged);
             // 
             // lblData
             // 

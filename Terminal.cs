@@ -416,6 +416,7 @@ namespace SerialPortTerminal
 
                 // Show the user the incoming data in hex format
                 Log(LogMsgType.Incoming, ByteArrayToHexString(buffer));
+                decodeMessage(buffer);
                 //Log(LogMsgType.Incoming, "\n" + convertToBinary(buffer));
                 //Log(LogMsgType.Incoming, "\n" + convertToInteger(buffer));
             }
@@ -520,17 +521,64 @@ namespace SerialPortTerminal
 			return selected;
 		}
 
-        private void cmbCommand_SelectedIndexChanged(object sender, EventArgs e)
+        private string[] decodeMessage(byte[] inputData)
         {
+            string[] parsedMessage = new string[4];
+            int i = 0;
 
+            parsedMessage[0] = "Error";
+            parsedMessage[1] = "Error";
+            parsedMessage[2] = "Error";
+            parsedMessage[3] = "Error";
+
+            //CHECKSUM
+            ushort calculatedCRC = 0;
+            string calculatedCRCString = "";
+            for (i = 1; i < inputData.Length - 4; i++)
+            {
+                calculatedCRC = calc_crc(calculatedCRC, inputData[i]);
+            }
+            calculatedCRCString = String.Format("{0:x2} ", calculatedCRC).ToUpper();
+            string incommingCRCString = "";
+            for (i = inputData.Length - 4; i < inputData.Length; i++)
+                incommingCRCString += ((char)inputData[i]).ToString();
+            parsedMessage[3] = calculatedCRCString;
+            Log(LogMsgType.Normal, String.Format("Calculated CRC: {0}\n", calculatedCRCString));
+            Log(LogMsgType.Normal, String.Format("Incomming CRC: {0}\n", incommingCRCString));
+            //DATA SIZE
+            string dataSizeString = ((char)inputData[1]).ToString() +
+                ((char)inputData[2]).ToString() +
+                ((char)inputData[3]).ToString();
+            ushort dataSize = (ushort)Int16.Parse(dataSizeString);
+            parsedMessage[0] = dataSize.ToString();
+            Log(LogMsgType.Normal, String.Format("Message size: {0}\n", dataSizeString));
+            //Command INDEX
+            int commandIndex = inputData[4];
+            Log(LogMsgType.Normal, String.Format("Command index: {0}\n", commandIndex));
+            //Command
+            string command = ((char)inputData[5]).ToString() +
+                ((char)inputData[6]).ToString() +
+                ((char)inputData[7]).ToString();
+            parsedMessage[1] = command;
+            Log(LogMsgType.Normal, String.Format("Message: {0}\n", command));
+            //Data
+            string dataString = "";
+            if (dataSize > 4) //There is actually payload
+            {
+                for (i = 0; i < dataSize - 1 - 3; i++) //3 for message size and 1 because of reasons
+                    dataString += ((char)inputData[i + 8]).ToString();
+                parsedMessage[2] = dataString;
+                Log(LogMsgType.Normal, String.Format("Data: [{0}]\n", dataString));
+            }
+            return parsedMessage;
         }
 
-        private void cmbCommand_TextUpdate(object sender, EventArgs e)
+        private byte[] encodeMessage(string index, string command, string data)
         {
             int i = 0;
             byte[] asciiBytes = null;
 
-            int messageIndex = 0;
+            int commandIndex = 0;
 
             ushort crc = 0;
             string crcAscii = "";
@@ -539,8 +587,8 @@ namespace SerialPortTerminal
             string dataLenghtAccii = "";
 
             //Log(LogMsgType.Normal, String.Format("Application Started at {0}\n", DateTime.Now));
-            dataLenght += cmbCommand.Text.Length;
-            dataLenght += txtData.Text.Length;
+            dataLenght += command.Length;
+            dataLenght += data.Length;
             dataLenghtAccii = dataLenght.ToString().PadLeft(3, '0');
 
             //MESSAGE TO MACHINE
@@ -549,48 +597,47 @@ namespace SerialPortTerminal
 
             messageToMachine[messageToMachineIndex++] = 0x02;
 
-            Log(LogMsgType.Normal, String.Format("Data lenght: {0}\n", dataLenghtAccii));
-
+            //Log(LogMsgType.Normal, String.Format("Data lenght: {0}\n", dataLenghtAccii));
 
             // SIZE
             asciiBytes = Encoding.ASCII.GetBytes(dataLenghtAccii);
             for (i = 0; i < asciiBytes.Length; i++)
             {
-                Log(LogMsgType.Normal, String.Format("dataLenghtAccii: char index = {0}, char = {1}, ascii = {2}, hex = {3:x2}\n", 
-                    i,
-                    asciiBytes[i].ToString(),
-                    asciiBytes[i],
-                    asciiBytes[i]));
+                //Log(LogMsgType.Normal, String.Format("dataLenghtAccii: char index = {0}, char = {1}, ascii = {2}, hex = {3:x2}\n", 
+                //    i,
+                //    asciiBytes[i].ToString(),
+                //    asciiBytes[i],
+                //    asciiBytes[i]));
 
                 messageToMachine[messageToMachineIndex++] = asciiBytes[i];
             }
 
             //MESSAGE INDEX
-            messageIndex = Int32.Parse(txtMessageIndex.Text);
-            Log(LogMsgType.Normal, String.Format("Message index = {0}\n", messageIndex));
-            messageToMachine[messageToMachineIndex++] = (byte)messageIndex;
+            commandIndex = Int32.Parse(txtMessageIndex.Text);
+            //Log(LogMsgType.Normal, String.Format("Message index = {0}\n", messageIndex));
+            messageToMachine[messageToMachineIndex++] = (byte)commandIndex;
 
             //COMMAND
-            asciiBytes = Encoding.ASCII.GetBytes(cmbCommand.Text);
+            asciiBytes = Encoding.ASCII.GetBytes(command);
             for (i = 0; i < asciiBytes.Length; i++)
             {
-                Log(LogMsgType.Normal, String.Format("dataLenghtAccii: char index = {0}, char = {1}, ascii = {2}, hex = {3:x2}\n",
-                    i,
-                    (string)asciiBytes[i].ToString(),
-                    asciiBytes[i],
-                    asciiBytes[i]));
+                //Log(LogMsgType.Normal, String.Format("dataLenghtAccii: char index = {0}, char = {1}, ascii = {2}, hex = {3:x2}\n",
+                //    i,
+                //    (string)asciiBytes[i].ToString(),
+                //    asciiBytes[i],
+                //    asciiBytes[i]));
 
                 messageToMachine[messageToMachineIndex++] = asciiBytes[i];
             }
             //DATA
-            asciiBytes = Encoding.ASCII.GetBytes(txtData.Text);
+            asciiBytes = Encoding.ASCII.GetBytes(data);
             for (i = 0; i < asciiBytes.Length; i++)
             {
-                Log(LogMsgType.Normal, String.Format("dataLenghtAccii: char index = {0}, char = {1}, ascii = {2}, hex = {3:x2}\n",
-                    i,
-                    asciiBytes[i].ToString(),
-                    asciiBytes[i],
-                    asciiBytes[i]));
+                //Log(LogMsgType.Normal, String.Format("dataLenghtAccii: char index = {0}, char = {1}, ascii = {2}, hex = {3:x2}\n",
+                //    i,
+                //    asciiBytes[i].ToString(),
+                //    asciiBytes[i],
+                //    asciiBytes[i]));
 
                 messageToMachine[messageToMachineIndex++] = asciiBytes[i];
             }
@@ -603,23 +650,54 @@ namespace SerialPortTerminal
             {
                 crc = calc_crc(crc, messageToMachine[i]);
             }
-            crcAscii = String.Format("{0:x2} ", crc);
-            asciiBytes = Encoding.ASCII.GetBytes(crcAscii.ToUpper());
+            crcAscii = String.Format("{0:x2} ", crc).ToUpper();
+            asciiBytes = Encoding.ASCII.GetBytes(crcAscii);
             for (i = 0; i < 4; i++)
                 messageToMachine[messageToMachineIndex++] = asciiBytes[i];
             txtCRC.Text = crcAscii;
 
-            for (i = 0; i < messageToMachine.Length; i++)
-            {
-                Log(LogMsgType.Normal, String.Format("{0:x2} ", messageToMachine[i]));
+            decodeMessage(messageToMachine);
 
+            return messageToMachine;
+        }
+
+        private void cmbCommand_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            byte[] messageToMachine = encodeMessage(txtMessageIndex.Text, cmbCommand.Text, txtData.Text);
+
+            for (int i = 0; i < messageToMachine.Length; i++)
+            {
                 if (i == 0)
                     txtSendData.Text = String.Format("{0:x2}", messageToMachine[i]);
                 else
                     txtSendData.Text += String.Format("{0:x2}", messageToMachine[i]);
             }
-            Log(LogMsgType.Normal, "\n");
+        }
 
+        private void cmbCommand_TextUpdate(object sender, EventArgs e)
+        {
+            byte[] messageToMachine = encodeMessage(txtMessageIndex.Text, cmbCommand.Text, txtData.Text);
+
+            for (int i = 0; i < messageToMachine.Length; i++)
+            {
+                if (i == 0)
+                    txtSendData.Text = String.Format("{0:x2}", messageToMachine[i]);
+                else
+                    txtSendData.Text += String.Format("{0:x2}", messageToMachine[i]);
+            }
+        }
+
+        private void txtData_TextChanged(object sender, EventArgs e)
+        {
+            byte[] messageToMachine = encodeMessage(txtMessageIndex.Text, cmbCommand.Text, txtData.Text);
+
+            for (int i = 0; i < messageToMachine.Length; i++)
+            {
+                if (i == 0)
+                    txtSendData.Text = String.Format("{0:x2}", messageToMachine[i]);
+                else
+                    txtSendData.Text += String.Format("{0:x2}", messageToMachine[i]);
+            }
         }
     }
 }
