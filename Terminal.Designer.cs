@@ -36,9 +36,6 @@ namespace SerialPortTerminal
             this.btnSend = new System.Windows.Forms.Button();
             this.cmbPortName = new System.Windows.Forms.ComboBox();
             this.cmbBaudRate = new System.Windows.Forms.ComboBox();
-            this.rbHex = new System.Windows.Forms.RadioButton();
-            this.rbText = new System.Windows.Forms.RadioButton();
-            this.gbMode = new System.Windows.Forms.GroupBox();
             this.lblComPort = new System.Windows.Forms.Label();
             this.lblBaudRate = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -69,27 +66,24 @@ namespace SerialPortTerminal
             this.txtData = new System.Windows.Forms.TextBox();
             this.lblData = new System.Windows.Forms.Label();
             this.cmbCommand = new System.Windows.Forms.ComboBox();
-            this.gbMode.SuspendLayout();
+            this.btnProcess = new System.Windows.Forms.Button();
+            this.rtfProcessedOutput = new System.Windows.Forms.RichTextBox();
+            this.btnClearInput = new System.Windows.Forms.Button();
             this.gbPortSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // rtfTerminal
             // 
-            this.rtfTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtfTerminal.Location = new System.Drawing.Point(12, 12);
+            this.rtfTerminal.Location = new System.Drawing.Point(6, 12);
             this.rtfTerminal.Name = "rtfTerminal";
-            this.rtfTerminal.Size = new System.Drawing.Size(466, 200);
+            this.rtfTerminal.Size = new System.Drawing.Size(471, 291);
             this.rtfTerminal.TabIndex = 0;
             this.rtfTerminal.Text = "";
             // 
             // txtSendData
             // 
-            this.txtSendData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSendData.Location = new System.Drawing.Point(76, 312);
+            this.txtSendData.Location = new System.Drawing.Point(552, 441);
             this.txtSendData.Name = "txtSendData";
             this.txtSendData.Size = new System.Drawing.Size(243, 20);
             this.txtSendData.TabIndex = 2;
@@ -101,7 +95,7 @@ namespace SerialPortTerminal
             // 
             this.lblSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblSend.AutoSize = true;
-            this.lblSend.Location = new System.Drawing.Point(12, 315);
+            this.lblSend.Location = new System.Drawing.Point(488, 444);
             this.lblSend.Name = "lblSend";
             this.lblSend.Size = new System.Drawing.Size(61, 13);
             this.lblSend.TabIndex = 1;
@@ -109,8 +103,7 @@ namespace SerialPortTerminal
             // 
             // btnSend
             // 
-            this.btnSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSend.Location = new System.Drawing.Point(325, 310);
+            this.btnSend.Location = new System.Drawing.Point(801, 439);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 23);
             this.btnSend.TabIndex = 3;
@@ -150,40 +143,6 @@ namespace SerialPortTerminal
             this.cmbBaudRate.Size = new System.Drawing.Size(69, 21);
             this.cmbBaudRate.TabIndex = 3;
             this.cmbBaudRate.Validating += new System.ComponentModel.CancelEventHandler(this.cmbBaudRate_Validating);
-            // 
-            // rbHex
-            // 
-            this.rbHex.AutoSize = true;
-            this.rbHex.Checked = true;
-            this.rbHex.Location = new System.Drawing.Point(12, 39);
-            this.rbHex.Name = "rbHex";
-            this.rbHex.Size = new System.Drawing.Size(44, 17);
-            this.rbHex.TabIndex = 1;
-            this.rbHex.TabStop = true;
-            this.rbHex.Text = "Hex";
-            this.rbHex.CheckedChanged += new System.EventHandler(this.rbHex_CheckedChanged);
-            // 
-            // rbText
-            // 
-            this.rbText.AutoSize = true;
-            this.rbText.Location = new System.Drawing.Point(12, 19);
-            this.rbText.Name = "rbText";
-            this.rbText.Size = new System.Drawing.Size(46, 17);
-            this.rbText.TabIndex = 0;
-            this.rbText.Text = "Text";
-            this.rbText.CheckedChanged += new System.EventHandler(this.rbText_CheckedChanged);
-            // 
-            // gbMode
-            // 
-            this.gbMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.gbMode.Controls.Add(this.rbText);
-            this.gbMode.Controls.Add(this.rbHex);
-            this.gbMode.Location = new System.Drawing.Point(388, 338);
-            this.gbMode.Name = "gbMode";
-            this.gbMode.Size = new System.Drawing.Size(89, 64);
-            this.gbMode.TabIndex = 5;
-            this.gbMode.TabStop = false;
-            this.gbMode.Text = "Data &Mode";
             // 
             // lblComPort
             // 
@@ -271,7 +230,6 @@ namespace SerialPortTerminal
             // 
             // btnOpenPort
             // 
-            this.btnOpenPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOpenPort.Location = new System.Drawing.Point(403, 418);
             this.btnOpenPort.Name = "btnOpenPort";
             this.btnOpenPort.Size = new System.Drawing.Size(75, 23);
@@ -301,7 +259,6 @@ namespace SerialPortTerminal
             // 
             // lnkAbout
             // 
-            this.lnkAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkAbout.AutoSize = true;
             this.lnkAbout.Location = new System.Drawing.Point(443, 444);
             this.lnkAbout.Name = "lnkAbout";
@@ -392,12 +349,11 @@ namespace SerialPortTerminal
             // 
             // btnClear
             // 
-            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(403, 311);
+            this.btnClear.Location = new System.Drawing.Point(801, 326);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 9;
-            this.btnClear.Text = "&Clear";
+            this.btnClear.Text = "Clear";
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // chkClearOnOpen
@@ -432,7 +388,7 @@ namespace SerialPortTerminal
             // 
             this.lblIndex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblIndex.AutoSize = true;
-            this.lblIndex.Location = new System.Drawing.Point(12, 219);
+            this.lblIndex.Location = new System.Drawing.Point(490, 330);
             this.lblIndex.Name = "lblIndex";
             this.lblIndex.Size = new System.Drawing.Size(82, 13);
             this.lblIndex.TabIndex = 12;
@@ -441,7 +397,7 @@ namespace SerialPortTerminal
             // txtMessageIndex
             // 
             this.txtMessageIndex.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMessageIndex.Location = new System.Drawing.Point(98, 215);
+            this.txtMessageIndex.Location = new System.Drawing.Point(574, 326);
             this.txtMessageIndex.MaxLength = 4;
             this.txtMessageIndex.Name = "txtMessageIndex";
             this.txtMessageIndex.Size = new System.Drawing.Size(34, 22);
@@ -452,7 +408,7 @@ namespace SerialPortTerminal
             // 
             this.lblCommand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblCommand.AutoSize = true;
-            this.lblCommand.Location = new System.Drawing.Point(138, 219);
+            this.lblCommand.Location = new System.Drawing.Point(489, 358);
             this.lblCommand.Name = "lblCommand";
             this.lblCommand.Size = new System.Drawing.Size(57, 13);
             this.lblCommand.TabIndex = 14;
@@ -462,7 +418,7 @@ namespace SerialPortTerminal
             // 
             this.txtCRC.Enabled = false;
             this.txtCRC.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCRC.Location = new System.Drawing.Point(438, 216);
+            this.txtCRC.Location = new System.Drawing.Point(574, 413);
             this.txtCRC.MaxLength = 4;
             this.txtCRC.Name = "txtCRC";
             this.txtCRC.Size = new System.Drawing.Size(39, 22);
@@ -473,7 +429,7 @@ namespace SerialPortTerminal
             // 
             this.lblCRC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblCRC.AutoSize = true;
-            this.lblCRC.Location = new System.Drawing.Point(397, 220);
+            this.lblCRC.Location = new System.Drawing.Point(490, 416);
             this.lblCRC.Name = "lblCRC";
             this.lblCRC.Size = new System.Drawing.Size(35, 13);
             this.lblCRC.TabIndex = 16;
@@ -482,8 +438,8 @@ namespace SerialPortTerminal
             // txtData
             // 
             this.txtData.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtData.Location = new System.Drawing.Point(330, 216);
-            this.txtData.MaxLength = 4;
+            this.txtData.Location = new System.Drawing.Point(574, 384);
+            this.txtData.MaxLength = 255;
             this.txtData.Name = "txtData";
             this.txtData.Size = new System.Drawing.Size(61, 22);
             this.txtData.TabIndex = 19;
@@ -494,7 +450,7 @@ namespace SerialPortTerminal
             // 
             this.lblData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblData.AutoSize = true;
-            this.lblData.Location = new System.Drawing.Point(291, 220);
+            this.lblData.Location = new System.Drawing.Point(488, 388);
             this.lblData.Name = "lblData";
             this.lblData.Size = new System.Drawing.Size(33, 13);
             this.lblData.TabIndex = 18;
@@ -506,7 +462,7 @@ namespace SerialPortTerminal
             this.cmbCommand.FormattingEnabled = true;
             this.cmbCommand.Items.AddRange(new object[] {
             "107"});
-            this.cmbCommand.Location = new System.Drawing.Point(201, 216);
+            this.cmbCommand.Location = new System.Drawing.Point(574, 354);
             this.cmbCommand.Name = "cmbCommand";
             this.cmbCommand.Size = new System.Drawing.Size(84, 24);
             this.cmbCommand.TabIndex = 20;
@@ -514,11 +470,41 @@ namespace SerialPortTerminal
             this.cmbCommand.SelectedIndexChanged += new System.EventHandler(this.cmbCommand_SelectedIndexChanged);
             this.cmbCommand.TextUpdate += new System.EventHandler(this.cmbCommand_TextUpdate);
             // 
+            // btnProcess
+            // 
+            this.btnProcess.Location = new System.Drawing.Point(380, 309);
+            this.btnProcess.Name = "btnProcess";
+            this.btnProcess.Size = new System.Drawing.Size(97, 23);
+            this.btnProcess.TabIndex = 21;
+            this.btnProcess.Text = "Process Input";
+            this.btnProcess.UseVisualStyleBackColor = true;
+            this.btnProcess.Click += new System.EventHandler(this.btnProcess_Click);
+            // 
+            // rtfProcessedOutput
+            // 
+            this.rtfProcessedOutput.Location = new System.Drawing.Point(483, 12);
+            this.rtfProcessedOutput.Name = "rtfProcessedOutput";
+            this.rtfProcessedOutput.Size = new System.Drawing.Size(393, 308);
+            this.rtfProcessedOutput.TabIndex = 22;
+            this.rtfProcessedOutput.Text = "";
+            // 
+            // btnClearInput
+            // 
+            this.btnClearInput.Location = new System.Drawing.Point(6, 309);
+            this.btnClearInput.Name = "btnClearInput";
+            this.btnClearInput.Size = new System.Drawing.Size(75, 23);
+            this.btnClearInput.TabIndex = 23;
+            this.btnClearInput.Text = "&Clear";
+            this.btnClearInput.Click += new System.EventHandler(this.btnClearInput_Click);
+            // 
             // frmTerminal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(497, 468);
+            this.ClientSize = new System.Drawing.Size(880, 468);
+            this.Controls.Add(this.btnClearInput);
+            this.Controls.Add(this.rtfProcessedOutput);
+            this.Controls.Add(this.btnProcess);
             this.Controls.Add(this.cmbCommand);
             this.Controls.Add(this.txtData);
             this.Controls.Add(this.lblData);
@@ -534,7 +520,6 @@ namespace SerialPortTerminal
             this.Controls.Add(this.lnkAbout);
             this.Controls.Add(this.gbPortSettings);
             this.Controls.Add(this.btnOpenPort);
-            this.Controls.Add(this.gbMode);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.lblSend);
             this.Controls.Add(this.txtSendData);
@@ -545,8 +530,6 @@ namespace SerialPortTerminal
             this.Text = "SerialPort Terminal";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmTerminal_FormClosing);
             this.Shown += new System.EventHandler(this.frmTerminal_Shown);
-            this.gbMode.ResumeLayout(false);
-            this.gbMode.PerformLayout();
             this.gbPortSettings.ResumeLayout(false);
             this.gbPortSettings.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -564,9 +547,6 @@ namespace SerialPortTerminal
     private System.Windows.Forms.Button btnSend;
     private System.Windows.Forms.ComboBox cmbPortName;
     private System.Windows.Forms.ComboBox cmbBaudRate;
-    private System.Windows.Forms.RadioButton rbHex;
-    private System.Windows.Forms.RadioButton rbText;
-    private System.Windows.Forms.GroupBox gbMode;
     private System.Windows.Forms.Label lblComPort;
     private System.Windows.Forms.Label lblBaudRate;
     private System.Windows.Forms.Label label1;
@@ -597,6 +577,9 @@ namespace SerialPortTerminal
         private System.Windows.Forms.TextBox txtData;
         private System.Windows.Forms.Label lblData;
         private System.Windows.Forms.ComboBox cmbCommand;
+        private System.Windows.Forms.Button btnProcess;
+        private System.Windows.Forms.RichTextBox rtfProcessedOutput;
+        private System.Windows.Forms.Button btnClearInput;
     }
 }
 
